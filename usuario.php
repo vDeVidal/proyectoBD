@@ -1,124 +1,142 @@
-<?php
-// Iniciar sesión para identificar al usuario
-session_start();
-$id_empleado = $_SESSION['id_empleado']; // ID del usuario autenticado
-
-// Consultar información del empleado
-$sql_empleado = "SELECT * FROM BC_BR_BV_RM_EMPLEADOS WHERE ID_EMPLEADO = $id_empleado";
-$result_empleado = $conn->query($sql_empleado);
-$empleado = $result_empleado->fetch_assoc();
-
-// Consultar turnos y horas trabajadas
-$sql_turnos = "SELECT T.ID_TURNO, HI.HORA_INGRESO, HS.HORA_SALIDA 
-               FROM BC_BR_BV_RM_TURNOS T
-               JOIN BC_BR_BV_RM_HORA_INGRESO HI ON T.ID_HORA_INGRESO = HI.ID_HORA_INGRESO
-               JOIN BC_BR_BV_RM_HORA_SALIDA HS ON T.ID_HORA_SALIDA = HS.ID_HORA_SALIDA
-               WHERE T.ID_TURNO = " . $empleado['ID_TURNO'];
-$result_turnos = $conn->query($sql_turnos);
-
-// Consultar destinatarios para mensajes
-$sql_destinatarios = "SELECT ID_EMPLEADO, NOMBRE_EMPLEADO FROM BC_BR_BV_RM_EMPLEADOS";
-$result_destinatarios = $conn->query($sql_destinatarios);
-
-// Procesar envío de mensajes si se envió el formulario
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $destinatario = $_POST['destinatario'];
-    $mensaje = $_POST['mensaje'];
-    $sql_mensaje = "INSERT INTO mensajes (remitente, destinatario, mensaje, fecha_envio) 
-                    VALUES ($id_empleado, $destinatario, '$mensaje', NOW())";
-
-    if ($conn->query($sql_mensaje) === TRUE) {
-        $mensaje_exito = "Mensaje enviado correctamente.";
-    } else {
-        $mensaje_error = "Error al enviar el mensaje: " . $conn->error;
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Usuario</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Opcional -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Bienvenido a tu Panel</h1>
-    </header>
-    <main>
-        <!-- Información del empleado -->
-        <section>
-            <h2>Información Personal</h2>
-            <p>Nombre: <?php echo $empleado['NOMBRE_EMPLEADO']; ?></p>
-            <p>Teléfono: <?php echo $empleado['NUMERO_TELEFONO']; ?></p>
-            <p>Sueldo: <?php echo $empleado['SUELDO']; ?></p>
-            <p>Horas Extras: <?php echo $empleado['HORAS_EXTRAS']; ?></p>
-        </section>
+<?php
+// Iniciar sesión
+session_start();
 
-        <!-- Turnos y horas trabajadas -->
-        <section>
-            <h2>Reporte de Horas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Hora de Ingreso</th>
-                        <th>Hora de Salida</th>
-                        <th>Horas Trabajadas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result_turnos->num_rows > 0) {
-                        while ($row = $result_turnos->fetch_assoc()) {
-                            $horas_trabajadas = $row['HORA_SALIDA'] - $row['HORA_INGRESO'];
-                            echo "<tr>
-                                <td>" . date('Y-m-d') . "</td>
-                                <td>" . $row['HORA_INGRESO'] . "</td>
-                                <td>" . $row['HORA_SALIDA'] . "</td>
-                                <td>" . $horas_trabajadas . " horas</td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='4'>No se encontraron turnos asignados.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </section>
+// Conexión a la base de datos
+$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+if (!$conn) {
+    $e = oci_error();
+    die("Error de conexión: " . $e['message']);
+}
 
-        <!-- Mensajería -->
-        <section>
-            <h2>Mensajes</h2>
-            <?php
-            if (isset($mensaje_exito)) {
-                echo "<p style='color: green;'>$mensaje_exito</p>";
-            } elseif (isset($mensaje_error)) {
-                echo "<p style='color: red;'>$mensaje_error</p>";
-            }
-            ?>
-            <form action="" method="POST">
-                <label for="destinatario">Destinatario:</label>
-                <select name="destinatario" id="destinatario" required>
-                    <?php
-                    if ($result_destinatarios->num_rows > 0) {
-                        while ($row = $result_destinatarios->fetch_assoc()) {
-                            echo "<option value='" . $row['ID_EMPLEADO'] . "'>" . $row['NOMBRE_EMPLEADO'] . "</option>";
-                        }
-                    } else {
-                        echo "<option value=''>No hay destinatarios disponibles</option>";
-                    }
-                    ?>
-                </select>
-                <br>
-                <label for="mensaje">Mensaje:</label>
-                <textarea name="mensaje" id="mensaje" rows="5" required></textarea>
-                <br>
-                <button type="submit">Enviar</button>
-            </form>
-        </section>
-    </main>
+// Obtener el ID del empleado autenticado
+$id_empleado = $_SESSION['id_empleado'];
+
+// Consulta para obtener los datos del empleado
+$query_empleado = "
+    SELECT 
+        e.NOMBRE_EMPLEADO, 
+        e.APELLIDO1_EMPLEADO, 
+        e.APELLIDO2_EMPLEADO,
+        e.NUMERO_TELEFONO,
+        e.HORAS_EXTRAS,
+        e.SUELDO AS SUELDO_BASE,
+        a.NOMBRE_AREA_TRABAJO,
+        a.VALOR_HORA_EXTRA, -- Nuevo campo
+        s.NOMBRE_SUCURSAL,
+        TO_CHAR(e.FECHA_CONTRATACION, 'DD/MM/YYYY') AS FECHA_CONTRATACION
+    FROM BC_BR_BV_RM_EMPLEADOS e
+    JOIN BC_BR_BV_RM_AREA_TRABAJO a ON e.ID_AREA_TRABAJO = a.ID_AREA_TRABAJO
+    JOIN BC_BR_BV_RM_SUCURSAL s ON e.ID_SUCURSAL = s.ID_SUCURSAL
+    WHERE e.ID_EMPLEADO = :id_empleado";
+
+$stid_empleado = oci_parse($conn, $query_empleado);
+oci_bind_by_name($stid_empleado, ':id_empleado', $id_empleado);
+oci_execute($stid_empleado);
+
+$empleado = oci_fetch_assoc($stid_empleado);
+
+if (!$empleado) {
+    die("Empleado no encontrado.");
+}
+
+// Calcular el sueldo total
+$sueldo_base = $empleado['SUELDO_BASE'];
+$valor_hora_extra = $empleado['VALOR_HORA_EXTRA'];
+$horas_extras = $empleado['HORAS_EXTRAS'];
+$sueldo_total = $sueldo_base + ($valor_hora_extra * $horas_extras);
+
+// Consulta para obtener los turnos del empleado
+$query_turnos = "
+    SELECT 
+        TO_CHAR(t.FECHA, 'DD/MM/YYYY') AS FECHA,
+        TO_CHAR(t.HORA_INGRESO, 'HH24:MI') AS HORA_INGRESO,
+        TO_CHAR(t.HORA_SALIDA, 'HH24:MI') AS HORA_SALIDA
+    FROM BC_BR_BV_RM_TURNOS t
+    WHERE t.ID_EMPLEADO = :id_empleado";
+
+$stid_turnos = oci_parse($conn, $query_turnos);
+oci_bind_by_name($stid_turnos, ':id_empleado', $id_empleado);
+oci_execute($stid_turnos);
+?>
+    <div class="container">
+        <h1>Bienvenid@, <?php echo htmlentities($empleado['NOMBRE_EMPLEADO']); ?></h1>
+        <h2>Información Personal</h2>
+        <p><strong>Nombre:</strong> <?php echo htmlentities($empleado['NOMBRE_EMPLEADO']); ?></p>
+        <p><strong>Apellidos:</strong> <?php echo htmlentities($empleado['APELLIDO1_EMPLEADO']) . " " . htmlentities($empleado['APELLIDO2_EMPLEADO']); ?></p>
+        <p><strong>Teléfono:</strong> <?php echo htmlentities($empleado['NUMERO_TELEFONO']); ?></p>
+        <p><strong>Sueldo Base:</strong> $<?php echo number_format($sueldo_base, 0, ',', '.'); ?></p>
+        <p><strong>Horas Extras:</strong> <?php echo htmlentities($empleado['HORAS_EXTRAS']); ?></p>
+        <p><strong>Valor Hora Extra:</strong> $<?php echo number_format($valor_hora_extra, 0, ',', '.'); ?></p>
+        <p><strong>Sueldo Total:</strong> $<?php echo number_format($sueldo_total, 0, ',', '.'); ?></p>
+        <p><strong>Fecha de Contratación:</strong> <?php echo htmlentities($empleado['FECHA_CONTRATACION']); ?></p>
+        <p><strong>Área de Trabajo:</strong> <?php echo htmlentities($empleado['NOMBRE_AREA_TRABAJO']); ?></p>
+        <p><strong>Sucursal:</strong> <?php echo htmlentities($empleado['NOMBRE_SUCURSAL']); ?></p>
+
+        <h2>Turnos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora de Ingreso</th>
+                    <th>Hora de Salida</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                while ($row = oci_fetch_assoc($stid_turnos)) {
+                    echo "<tr>
+                            <td>" . htmlentities($row['FECHA']) . "</td>
+                            <td>" . htmlentities($row['HORA_INGRESO']) . "</td>
+                            <td>" . htmlentities($row['HORA_SALIDA']) . "</td>
+                          </tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

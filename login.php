@@ -2,141 +2,139 @@
 session_start();
 
 // Conexión a la base de datos
-//aki yo caxo k tienen q cambiarlo segun la base de datos k tengan en su pc
 $conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
 if (!$conn) {
     $e = oci_error();
-    echo "Error de conexión: " . $e['message'];
-    exit;
+    die("Error de conexión: " . $e['message']);
 }
 
-$error = ''; // Variable para almacenar el mensaje de error
+// Procesar el inicio de sesión
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = isset($_POST['username']) ? $_POST['username'] : null;
+    $password = isset($_POST['password']) ? $_POST['password'] : null;
 
-// Verificar el envío del formulario
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Validar que ambos campos no estén vacíos
+    if ($username && $password) {
+        // Consultar al usuario en la base de datos
+        $query = "SELECT ID_EMPLEADO, USERNAME, PASSWORD, ID_SESION, PRIMERA_VEZ_INICIO_SESION 
+                  FROM BC_BR_BV_RM_EMPLEADOS 
+                  WHERE USERNAME = :username";
+        $stid = oci_parse($conn, $query);
+        oci_bind_by_name($stid, ':username', $username);
+        oci_execute($stid);
 
-    // Consulta SQL para verificar el usuario en la tabla `usuarios`
-    $query = 'SELECT * FROM usuarios WHERE username = :username AND password = :password';
-    $stid = oci_parse($conn, $query);
+        $user = oci_fetch_assoc($stid);
 
-    // Vincular parámetros
-    oci_bind_by_name($stid, ':username', $username);
-    oci_bind_by_name($stid, ':password', $password);
+        if ($user && $password === $user['PASSWORD']) {
+            $_SESSION['id_empleado'] = $user['ID_EMPLEADO'];
+            $_SESSION['id_sesion'] = $user['ID_SESION'];
+            $_SESSION['username'] = $user['USERNAME'];
 
-    // Ejecutar la consulta
-    oci_execute($stid);
+            // Verificar si es la primera vez que inicia sesión
+            if ($user['PRIMERA_VEZ_INICIO_SESION'] == 1) {
+                header('Location: cambiar_contrasena.php');
+                exit;
+            }
 
-    // Verificar si se encontró el usuario
-    if ($row = oci_fetch_array($stid, OCI_ASSOC)) {
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username;
-        header("Location: empleados.php"); // Redirigir al usuario si la autenticación es correcta
-        exit;
+            // Redirigir según el rol
+            if ($user['ID_SESION'] == 1) { // Admin
+                header('Location: empleados.php');
+            } else { // Usuario normal
+                header('Location: usuario.php');
+            }
+            exit;
+        } else {
+            $error = "Usuario o contraseña incorrectos.";
+        }
     } else {
-        $error = "Usuario o contraseña incorrectos."; // Mensaje de error si las credenciales no coinciden
+        $error = "Por favor, complete todos los campos.";
     }
-
-    oci_free_statement($stid);
 }
-
-// Cerrar conexión
-oci_close($conn);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <style>
-        /* Estilos generales */
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
         }
-
         .login-container {
-            width: 100%;
-            max-width: 400px;
+            background-color: #ffffff;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
             text-align: center;
         }
-
-        h2 {
-            color: #333;
+        .login-container h1 {
+            font-size: 24px;
             margin-bottom: 20px;
+            color: #333333;
         }
-
         .form-group {
             margin-bottom: 15px;
             text-align: left;
         }
-
         .form-group label {
             display: block;
-            font-weight: bold;
+            font-size: 14px;
             margin-bottom: 5px;
-            color: #555;
         }
-
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
+            border-radius: 4px;
         }
-
-        .btn {
+        .form-group button {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
-            color: #fff;
+            background-color: #007BFF;
+            color: #ffffff;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            margin-top: 10px;
         }
-
-        .btn:hover {
-            background-color: #45a049;
+        .form-group button:hover {
+            background-color: #0056b3;
         }
-
-        /* Estilo para el mensaje de error */
         .error {
             color: red;
-            margin-top: 15px;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Iniciar Sesión</h2>
-        <!-- Mostrar mensaje de error si existe -->
-        <?php if (!empty($error)) { echo "<p class='error'>$error</p>"; } ?>
-        <form action="login.php" method="POST">
+        <h1>Iniciar Sesión</h1>
+        <?php if (isset($error)): ?>
+            <div class="error"><?php echo $error; ?></div>
+        <?php endif; ?>
+        <form method="POST" action="">
             <div class="form-group">
                 <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
             </div>
             <div class="form-group">
                 <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
             </div>
-            <button type="submit" class="btn">Iniciar Sesión</button>
+            <div class="form-group">
+                <button type="submit">Iniciar Sesión</button>
+            </div>
         </form>
     </div>
 </body>
