@@ -1,0 +1,63 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Fondo ajustado para que ocupe todo el viewport y sea consistente */
+.background {
+    position: fixed; /* Fija la imagen al fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra el área completamente */
+    z-index: -2; /* Debajo de todo el contenido */
+    filter: blur(5px) brightness(80%); /* Difuminado y oscurecido */
+}
+
+/* Contenedor principal */
+.container {
+    position: relative;
+    z-index: 1; /* Por encima de la imagen de fondo */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 90%; /* Ajuste del ancho para que sea responsivo */
+    text-align: center;
+}
+
+/* Estilos para encabezados */
+h1, h2 {
+    color: #333; /* Color oscuro para buen contraste */
+    margin-bottom: 10px;
+}
+
+/* Estilos para párrafos */
+p {
+    color: #555;
+}
+
+/* Estilos para tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #007BFF;
+    color: white;
+}
