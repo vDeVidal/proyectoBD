@@ -3,7 +3,7 @@
 session_start();
 
 // Conexión a la base de datos
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);

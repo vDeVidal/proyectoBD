@@ -4,41 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Usuario</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            text-align: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-    </style>
+    <link rel="icon" href="img/icono.jpeg.jpg">
+    <link rel="stylesheet" href="path/to/estilos.css">
+    <link rel="stylesheet" href="css/usuario.css">
 </head>
 <body>
 <?php
@@ -46,7 +14,7 @@
 session_start();
 
 // Conexión a la base de datos
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);
@@ -102,6 +70,7 @@ $stid_turnos = oci_parse($conn, $query_turnos);
 oci_bind_by_name($stid_turnos, ':id_empleado', $id_empleado);
 oci_execute($stid_turnos);
 ?>
+    <img src="img/fondo2.jpeg" alt="Fondo" class="background">
     <div class="container">
         <h1>Bienvenid@, <?php echo htmlentities($empleado['NOMBRE_EMPLEADO']); ?></h1>
         <h2>Información Personal</h2>
@@ -132,7 +101,7 @@ oci_execute($stid_turnos);
                             <td>" . htmlentities($row['FECHA']) . "</td>
                             <td>" . htmlentities($row['HORA_INGRESO']) . "</td>
                             <td>" . htmlentities($row['HORA_SALIDA']) . "</td>
-                          </tr>";
+                        </tr>";
                 }
                 ?>
             </tbody>

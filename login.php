@@ -2,7 +2,7 @@
 session_start();
 
 // Conexión a la base de datos
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);
@@ -38,11 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Redirigir según el rol
             if ($user['ID_SESION'] == 1) { // Admin
+                // Para depuración: Muestra que es un administrador y redirige
+                // echo "Redirigiendo a empleados.php"; 
                 header('Location: empleados.php');
+                exit;
             } else { // Usuario normal
                 header('Location: usuario.php');
+                exit;
             }
-            exit;
         } else {
             $error = "Usuario o contraseña incorrectos.";
         }
@@ -58,66 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .login-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
-        }
-        .login-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-    </style>
+    <link rel="icon" href="img/icono.jpeg.jpg">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
+    <img src="img/fondo2.jpeg" alt="Fondo" class="background-image">
     <div class="login-container">
         <h1>Iniciar Sesión</h1>
         <?php if (isset($error)): ?>

@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hora_salida = $_POST['hora_salida'];   // Hora de salida (HH:MI)
 
     // Conexión a la base de datos
-    $conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+    $conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
     if (!$conn) {
         $e = oci_error();
         die("Error de conexión: " . $e['message']);
