@@ -37,7 +37,7 @@ body {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: left;
 }
 
@@ -48,7 +48,7 @@ body {
 }
 
 .form-group input {
-    width: 100%;
+    width: 94%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -57,9 +57,9 @@ body {
 .form-group button {
     width: 100%;
     padding: 10px;
-    background-color: #007BFF;
+    background-color: rgb(220, 0, 15);
     color: #ffffff;
-    border: none;
+    border: rgb(252, 249, 198);
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
@@ -67,7 +67,7 @@ body {
 }
 
 .form-group button:hover {
-    background-color: #0056b3;
+    background-color: rgb(130, 0, 14);;
 }
 
 .error {

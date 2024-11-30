@@ -60,13 +60,13 @@ input[type="password"], button {
 }
 
 button {
-    background-color: #007BFF;
+    background-color: rgb(220, 0, 15);
     color: white;
-    border: none;
+    border: rgb(252, 249, 198);
     cursor: pointer;
     font-size: 16px;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: rgb(130, 0, 14);;
 }
