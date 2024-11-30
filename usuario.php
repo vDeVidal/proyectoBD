@@ -67,7 +67,6 @@ oci_execute($stid_turnos);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Usuario</title>
     <link rel="icon" href="img/icono.jpeg.jpg">
-    <link rel="stylesheet" href="path/to/estilos.css">
     <link rel="stylesheet" href="css/usuario.css">
 </head>
 <body>

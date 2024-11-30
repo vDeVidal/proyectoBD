@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('navbar.php');
+include('navbar.php');  // El navbar debe ir primero
 
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 // Conexión a la base de datos
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);
@@ -42,21 +42,27 @@ oci_execute($stid);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta htpp-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Lista de Empleados</title>
-    <link rel="icon" href="img/icono.jpeg.jpg">
+    <link rel="icon" href="img/LOGUILLO.png">
     <link rel="stylesheet" href="css/empleados.css">
 </head>
 <body>
+    <!-- Imagen de fondo -->
+    <img src="img/fondo2.jpeg" alt="Fondo" class="background">
+    
+    <!-- Contenedor del contenido principal -->
     <div class="container">
-        <h1>Lista de Empleados</h1>
-        <div class="actions">
-            <form class="search-form" method="GET" action="">
-                <input type="text" name="nombre" placeholder="Buscar por nombre" value="<?php echo htmlspecialchars(isset($_GET['nombre']) ? $_GET['nombre'] : ''); ?>">
-                <button type="submit" class="btn">Buscar</button>
-            </form>
+    <h1>Lista de Empleados</h1>
+    <div class="actions">
+        <form class="search-form" method="GET" action="">
+            <input type="text" name="nombre" placeholder="Buscar por nombre" value="<?php echo htmlspecialchars(isset($_GET['nombre']) ? $_GET['nombre'] : ''); ?>">
+            <button type="submit" class="btn">Buscar</button>
+        </form>
+        <div align="right">
             <a href="agregar_empleado.php" class="btn">Nuevo Empleado</a>
         </div>
+    </div>
         <table>
             <thead>
                 <tr>
@@ -69,26 +75,27 @@ oci_execute($stid);
                 </tr>
             </thead>
             <tbody>
-                <?php
-                while ($row = oci_fetch_assoc($stid)) {
-                    echo "<tr>";
-                    echo "<td>" . htmlentities($row['NOMBRE_EMPLEADO']) . "</td>";
-                    echo "<td>" . htmlentities($row['APELLIDO1_EMPLEADO']) . "</td>";
-                    echo "<td>" . htmlentities($row['APELLIDO2_EMPLEADO']) . "</td>";
-                    echo "<td>" . htmlentities($row['NOMBRE_AREA_TRABAJO']) . "</td>";
-                    echo "<td>" . htmlentities($row['NOMBRE_SUCURSAL']) . "</td>";
-                    echo "<td>";
-                    echo "<a href='editar_empleado.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-edit'>Editar</a> ";
-                    echo "<a href='agregar_turno.php?id_empleado=" . $row['ID_EMPLEADO'] . "' class='btn btn-turno'>Agregar Turno</a> ";
-                    echo "<a href='ver_turnos.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-verTurno'>Ver Turnos</a> ";
-                    echo "<a href='eliminar_empleado.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-delete'>Eliminar</a>";
-                    echo "</td>";
-                    echo "</tr>";
-                }
-                ?>
+            <?php
+// Código existente para conexión y consulta
+        while ($row = oci_fetch_assoc($stid)) {
+            echo "<tr>";
+            echo "<td>" . htmlentities($row['NOMBRE_EMPLEADO']) . "</td>";
+            echo "<td>" . htmlentities($row['APELLIDO1_EMPLEADO']) . "</td>";
+            echo "<td>" . htmlentities($row['APELLIDO2_EMPLEADO']) . "</td>";
+            echo "<td>" . htmlentities($row['NOMBRE_AREA_TRABAJO']) . "</td>";
+            echo "<td>" . htmlentities($row['NOMBRE_SUCURSAL']) . "</td>";
+            echo "<td>";
+            echo "<a href='editar_empleado.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-edit'>Editar</a> ";
+            echo "<a href='agregar_turno.php?id_empleado=" . $row['ID_EMPLEADO'] . "' class='btn btn-turno'>Agregar Turno</a> ";
+            echo "<a href='ver_turnos.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-verTurno'>Ver Turnos</a> ";
+            echo "<a href='detalleEmpleado.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-sueldo'>Informacion</a>";
+            echo "<a href='eliminar_empleado.php?id=" . $row['ID_EMPLEADO'] . "' class='btn btn-delete'>Eliminar</a> ";
+            echo "</td>";
+            echo "</tr>";
+            }
+            ?>
             </tbody>
         </table>
     </div>
 </body>
 </html>
-

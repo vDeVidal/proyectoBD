@@ -138,37 +138,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Editar Empleado</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="path/to/estilos.css">
+    <link rel="stylesheet" href="css/editarEmpleados.css">
 </head>
 <body>
-    <div class="container mt-4">
-        <h2 class="text-center">Editar Empleado</h2>
+    <img src="img/fondo2.jpeg" alt="Fondo" class="background">
+    <div class="container">
+        <h2>Editar Empleado</h2>
         <form method="POST" action="">
-            <!-- Datos del Empleado -->
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" value="<?php echo htmlentities($empleado['NOMBRE_EMPLEADO']); ?>" required>
+                <input type="text" id="nombre" name="nombre" value="<?php echo htmlentities($empleado['NOMBRE_EMPLEADO']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="apellido1">Apellido Paterno:</label>
-                <input type="text" id="apellido1" name="apellido1" class="form-control" value="<?php echo htmlentities($empleado['APELLIDO1_EMPLEADO']); ?>" required>
+                <input type="text" id="apellido1" name="apellido1" value="<?php echo htmlentities($empleado['APELLIDO1_EMPLEADO']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="apellido2">Apellido Materno:</label>
-                <input type="text" id="apellido2" name="apellido2" class="form-control" value="<?php echo htmlentities($empleado['APELLIDO2_EMPLEADO']); ?>" required>
+                <input type="text" id="apellido2" name="apellido2" value="<?php echo htmlentities($empleado['APELLIDO2_EMPLEADO']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="telefono">Número de Teléfono:</label>
-                <input type="text" id="telefono" name="telefono" class="form-control" value="<?php echo htmlentities($empleado['NUMERO_TELEFONO']); ?>" required>
+                <input type="text" id="telefono" name="telefono" value="<?php echo htmlentities($empleado['NUMERO_TELEFONO']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="sueldo">Sueldo:</label>
-                <input type="number" id="sueldo" name="sueldo" class="form-control" value="<?php echo htmlentities($empleado['SUELDO']); ?>" required>
+                <input type="number" id="sueldo" name="sueldo" value="<?php echo htmlentities($empleado['SUELDO']); ?>" required>
             </div>
-                <div class="form-group">
+            <div class="form-group">
                 <label for="id_sucursal">Sucursal:</label>
-                <select id="id_sucursal" name="id_sucursal" class="form-control" required>
+                <select id="id_sucursal" name="id_sucursal" required>
                     <?php while ($sucursal = oci_fetch_assoc($stid_sucursales)): ?>
                         <option value="<?php echo $sucursal['ID_SUCURSAL']; ?>" <?php echo ($empleado['ID_SUCURSAL'] ?? null) == $sucursal['ID_SUCURSAL'] ? 'selected' : ''; ?>>
                             <?php echo htmlentities($sucursal['NOMBRE_SUCURSAL']); ?>
@@ -178,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="form-group">
                 <label for="id_area_trabajo">Área de Trabajo:</label>
-                <select id="id_area_trabajo" name="id_area_trabajo" class="form-control" required>
+                <select id="id_area_trabajo" name="id_area_trabajo" required>
                     <?php while ($area = oci_fetch_assoc($stid_areas)): ?>
                         <option value="<?php echo $area['ID_AREA_TRABAJO']; ?>" <?php echo ($empleado['ID_AREA_TRABAJO'] ?? null) == $area['ID_AREA_TRABAJO'] ? 'selected' : ''; ?>>
                             <?php echo htmlentities($area['NOMBRE_AREA_TRABAJO']); ?>
@@ -186,36 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endwhile; ?>
                 </select>
             </div>
-
-            <!-- Datos Bancarios -->
-            <h3>Datos Bancarios</h3>
-            <div class="form-group">
-                <label for="nro_cuenta">Número de Cuenta:</label>
-                <input type="text" id="nro_cuenta" name="nro_cuenta" class="form-control" value="<?php echo htmlentities($datos_bancarios['NRO_CUENTA'] ?? ''); ?>">
-            </div>
-            <div class="form-group">
-                <label for="id_tipo_cuenta">Tipo de Cuenta:</label>
-                <select id="id_tipo_cuenta" name="id_tipo_cuenta" class="form-control">
-                    <option value="">Seleccione un Tipo</option>
-                    <?php while ($tipo = oci_fetch_assoc($stid_tipos_cuenta)): ?>
-                        <option value="<?php echo $tipo['ID_TIPO_CUENTA']; ?>" <?php echo ($datos_bancarios['ID_TIPO_CUENTA'] ?? null) == $tipo['ID_TIPO_CUENTA'] ? 'selected' : ''; ?>>
-                            <?php echo htmlentities($tipo['TIPO_CUENTA']); ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="id_banco_empleado">Banco:</label>
-                <select id="id_banco_empleado" name="id_banco_empleado" class="form-control">
-                    <option value="">Seleccione un Banco</option>
-                    <?php while ($banco = oci_fetch_assoc($stid_bancos)): ?>
-                        <option value="<?php echo $banco['ID_BANCO_EMPLEADO']; ?>" <?php echo ($datos_bancarios['ID_BANCO_EMPLEADO'] ?? null) == $banco['ID_BANCO_EMPLEADO'] ? 'selected' : ''; ?>>
-                            <?php echo htmlentities($banco['NOMBRE_BANCO']); ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
+            <button type="submit" class="btn-block">Guardar Cambios</button>
         </form>
     </div>
 </body>

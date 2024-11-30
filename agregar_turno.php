@@ -6,9 +6,9 @@ if (!isset($_GET['id_empleado'])) {
 $id_empleado = $_GET['id_empleado'];
 
 session_start();
-
+include('navbar.php');
 // Conexión a la base de datos
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);
@@ -20,58 +20,11 @@ if (!$conn) {
 <head>
     <meta charset="UTF-8">
     <title>Agregar Turno</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .form-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 400px;
-        }
-        .form-container h2 {
-            text-align: center;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .form-group button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="icon" href="img/icono.jpeg.jpg">
+    <link rel="stylesheet" href="css/agregarTurno.css">
 </head>
 <body>
+    <img src="img/fondo2.jpeg" alt="Fondo" class="background">
     <div class="form-container">
         <h2>Agregar Turno</h2>
         <form method="POST" action="procesar_turno.php">

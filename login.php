@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Inicia el almacenamiento en búfer de salida al principio del script
 session_start();
 
 // Conexión a la base de datos
@@ -29,19 +30,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['id_empleado'] = $user['ID_EMPLEADO'];
             $_SESSION['id_sesion'] = $user['ID_SESION'];
             $_SESSION['username'] = $user['USERNAME'];
+            $_SESSION['loggedin'] = true; // Establece la variable de sesión para marcar que el usuario ha iniciado sesión.
 
             // Verificar si es la primera vez que inicia sesión
             if ($user['PRIMERA_VEZ_INICIO_SESION'] == 1) {
+                if (headers_sent($file, $line)) {
+                    die("Las cabeceras ya fueron enviadas en $file en la línea $line.");
+                }
                 header('Location: cambiar_contrasena.php');
                 exit;
             }
+            
 
             // Redirigir según el rol
-            if ($user['ID_SESION'] == 1) { // Admin
+            if ((int)$user['ID_SESION'] === 1) { // Admin
                 header('Location: empleados.php');
-            } else { // Usuario normal
+                exit;
+            } else {
                 header('Location: usuario.php');
-            }
+                exit;
+            }        
             exit;
         } else {
             $error = "Usuario o contraseña incorrectos.";

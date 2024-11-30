@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 // Conexión a la base de datos
 //aki yo caxo k tienen q cambiarlo segun la base de datos k tengan en su pc
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);
@@ -52,58 +52,10 @@ if (!oci_execute($stid_area_trabajo)) {
 <head>
     <meta charset="UTF-8">
     <title>Agregar Empleado</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .form-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 400px;
-        }
-        .form-container h2 {
-            text-align: center;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .form-group button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="css/agregarEmpleado.css">
 </head>
 <body>
+<img src="img/fondo2.jpeg" alt="Fondo" class="background">
     <div class="form-container">
         <h2>Agregar Empleado</h2>
         <form method="POST" action="procesar_empleado.php">
@@ -127,7 +79,7 @@ if (!oci_execute($stid_area_trabajo)) {
                 </div>
             </div>
             <div class="form-group">
-                <label for="id_sucursal">ID Sucursal:</label>
+                <label for="id_sucursal">Sucursal:</label>
                 <select id="id_sucursal" name="id_sucursal" required>
                     <option value="">Seleccione una Sucursal</option>
                     <?php
@@ -139,7 +91,7 @@ if (!oci_execute($stid_area_trabajo)) {
                 </select>
             </div>
             <div class="form-group">
-                <label for="id_area_trabajo">ID Área de Trabajo:</label>
+                <label for="id_area_trabajo">Área de Trabajo:</label>
                 <select id="id_area_trabajo" name="id_area_trabajo" required>
                     <option value="">Seleccione un Area</option>
                     <?php

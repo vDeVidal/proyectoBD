@@ -45,6 +45,7 @@ if (!oci_execute($stid)) {
     <link rel="stylesheet" href="css/turno.css">
 </head>
 <body>
+<img src="img/fondo2.jpeg" alt="Fondo" class="background">
     <div class="container">
         <h2>Turnos del Empleado</h2>
         <table>

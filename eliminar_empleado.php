@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 // Conexión a la base de datos
 //aki yo caxo k tienen q cambiarlo segun la base de datos k tengan en su pc
-$conn = oci_connect('benja', 'benja123', 'localhost/XEPDB1');
+$conn = oci_connect('benja', 'benja123', '26.179.117.214/XEPDB1');
 if (!$conn) {
     $e = oci_error();
     die("Error de conexión: " . $e['message']);
