@@ -1,104 +1,144 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+/* Resetear márgenes y padding, asegurando que la página ocupe todo el viewport */
+body, html {
     margin: 0;
     padding: 0;
-}
-.container {
-    margin: 20px auto;
-    width: 80%;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-h1 {
-    text-align: center;
-    color: #333;
-}
-.actions {
+    height: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start; /* Alinea el contenido desde el principio */
+    position: relative;
 }
-.actions .btn {
-    display: inline-block;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
+
+/* Navbar debe estar en la capa superior */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Asegura que el navbar esté encima del resto del contenido */
+    background-color: transparent; /* Fondo oscuro */
     color: white;
-    background-color: #007bff;
+    padding: 5px 20px;
 }
-.actions .btn:hover {
-    background-color: #0056b3;
+
+/* Fondo ajustado para que ocupe todo el viewport y sea consistente */
+.background {
+    position: fixed; /* Fija la imagen al fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra el área completamente */
+    z-index: -2; /* Queda debajo de todo el contenido */
+    filter: blur(5px) brightness(80%); /* Difuminado y oscurecido */
 }
-.search-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+
+/* Contenedor principal */
+.container {
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;         /* Contenedor 100% ancho */
+    text-align: center;
+    margin-top: 80px;
 }
-.search-form input {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+
+
+/* Estilos para encabezados */
+h1, h2 {
+    color: #333; /* Color oscuro para buen contraste */
+    margin-bottom: 10px;
 }
+
+/* Estilos para párrafos */
+p {
+    color: #555;
+}
+
+/* Estilos para tablas */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
-table th, table td {
-    border: 1px solid #ddd;
+
+th, td {
     padding: 10px;
     text-align: center;
+    border: 5px solid #ccc;
 }
-table th {
-    background-color: #4CAF50;
+
+th {
+    background-color: rgb(220, 0, 15);
     color: white;
 }
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-table tr:hover {
-    background-color: #f1f1f1;
-}
+
+/* Estilo de los botones en la tabla */
+/* Estilo base para los botones */
 .btn {
-    display: inline-block;
-    padding: 5px 10px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
+    background-color: rgb(220, 0, 15);
     color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none; /* Para los enlaces con apariencia de botón */
+    display: inline-block; /* Asegura que actúe como botón */
+    text-align: center;
 }
+
+/* Efecto hover para los botones */
+.btn:hover {
+    background-color: rgb(130, 0, 14); /* Color más oscuro al pasar el mouse */
+    transform: scale(1.05); /* Efecto de agrandamiento ligero */
+    transition: all 0.3s ease; /* Suaviza la transición */
+}
+
+/* Estilo específico para el botón Buscar si deseas diferenciarlos */
+.search-form .btn {
+    background-color: rgb(34, 139, 34); /* Verde más oscuro */
+}
+
+.search-form .btn:hover {
+    background-color: rgb(28, 111, 28); /* Color más oscuro al pasar el mouse */
+}
+
 .btn-edit {
     background-color: #007bff;
 }
+
 .btn-edit:hover {
     background-color: #0056b3;
 }
+
 .btn-turno {
     background-color: #258282;
-  
 }
+
 .btn-turno:hover {
     background-color: #17a2b8;
-  
 }
-.btn-verTurno{
+
+.btn-verTurno {
     background-color: #28a745;
-   
 }
-.btn-verTurno:hover{
-    background-color:#218838;
-  
+
+.btn-verTurno:hover {
+    background-color: #218838;
 }
+
 .btn-delete {
     background-color: #ff3333;
 }
+
 .btn-delete:hover {
     background-color: #cc0000;
+}
+.btn-sueldo {
+    background-color: aquamarine;
+    margin-right: 10px; /* Ajusta el valor según el espacio deseado */
 }

@@ -8,6 +8,16 @@ body {
     align-items: center;
     height: 100vh;
 }
+.background {
+    position: fixed; /* Fija la imagen como fondo */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ocupa todo el ancho */
+    height: 100%; /* Ocupa todo el alto */
+    object-fit: cover; /* Asegura que la imagen se escale correctamente */
+    z-index: -1; /* Envía la imagen detrás del contenido */
+    filter: blur(5px) brightness(80%); /* Difumina y oscurece */
+}
 .container {
     background-color: #fff;
     padding: 20px;
@@ -25,7 +35,7 @@ th, td {
     border: 1px solid #ddd;
 }
 th {
-    background-color: #4CAF50;
+    background-color: rgb(220, 0, 15);
     color: white;
 }
 a {
